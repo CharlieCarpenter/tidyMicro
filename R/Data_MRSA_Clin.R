@@ -1,0 +1,23 @@
+#' A data set containing the clinical data of the subjects sequenced for MRSA study
+#'
+#' Data from a study to define the nasal microbiome of hospital inpatients who are persistently colonized with methicillin-resistant Staphylococcus aureus (MRSA) compared with matched, non-colonized controls. See original paper for matching proceedure.
+#'
+#' @format A 52x15 data.frame
+#' \describe{
+#'   \item{\code{Lib}}{A character vector of sequencing library names}
+#'   \item{\code{Subject}}{Subject names}
+#'   \item{\code{Age}}{Subject's Ages in years}
+#'   \item{\code{Antibiotics}}{Whether or not subjects were on some form of antibiotics. 'N' = No, 'Y' = Yes}
+#'   \item{\code{Case_or_Control}}{Whether or not the subject was MRSA positive. 'Case' = MRSA positive}
+#'   \item{\code{Decade}}{Subjects age in decades. '8' means the subject was in their 80s}
+#'   \item{\code{Diabetes}}{Whether or not the subject had diabets. 'N' = No, 'Y' = Yes}
+#'   \item{\code{Match}}{Numeric variable indicating matchus subjects}
+#'   \item{\code{MRSA_Postive}}{Whether or not the subject was MRSA positive. 'Y' = MRSA positive}
+#'   \item{\code{Nasal_Steroids}}{Whether or not the subject was using nasal steroids. 'N' = No, 'Y' = Yes}
+#'   \item{\code{Nursing_Home}}{Whether or not the subject was staying in a nursing home. 'N' = No, 'Y' = Yes}
+#'   \item{\code{Smoking}}{Subject's smoking status. 'F' = Former, 'N' = Never, 'Y' = Yes/current smoker}
+#'
+#'   \item{\code{Lib names}}{The following columns are the sequencing counts for each library with library names}
+#' }
+#' @source \url{http://dx.doi.org/10.1016/j.jinf.2015.08.008}
+"mrsa_clin"
