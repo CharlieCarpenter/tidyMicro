@@ -11,9 +11,9 @@
 #' @details The grp_var must have a least 2 levels. For a 2 level factor a Mann-Whitney test will be calculated through \code{\link[stats]{wilcox.test}}, and for 3 or more levels a Kruskal-Wallis test will be run throuh \code{\link[stats]{kruskal.test}}
 #' @return A data frame containing the p-value for each taxa's rank sum test.
 #' @examples
-#' data(cla); data(clin)
+#' data(bpd_cla); data(bpd_clin)
 #'
-#' set <- tidy_micro(otu_tabs = cla, tab_names = "Class", clinical = clin,
+#' set <- tidy_micro(otu_tabs = bpd_cla, tab_names = "Class", clinical = bpd_clin,
 #' prev_cutoff = 5, ra_cutoff = 0.1, exclude_taxa = c("Unclassified", "Bacteria")) %>%
 #' filter(day == 7) ## Only including the first week
 #'
@@ -30,6 +30,15 @@ micro_rank_sum <- function(micro_set, table, grp_var, y = ra, mod = NULL, ...){
 
   if(table %nin% unique(micro_set$Table)) stop("Specified table is not in supplied micro_set")
   nlev <- nlevels(micro_set %>% dplyr::pull(!!rlang::enquo(grp_var)))
+
+  if(!is.null(mod)){
+    if(mod$Model_Type %nin% c('bb_mod', 'nb_mod')){
+      stop("'mod' must be output from either nb_mods or bb_mods")
+    }
+    if('Model_Type' %nin% names(mod)){
+      stop("'mod' must be output from either nb_mods or bb_mods")
+    }
+  }
 
   ## Kruskal-Wallis rank sum
   if(nlev > 2){

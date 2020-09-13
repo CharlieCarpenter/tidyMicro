@@ -6,22 +6,23 @@
 \usage{
 tidy_micro(
   otu_tabs,
-  tab_names,
   clinical,
+  tab_names,
   prev_cutoff = 0,
   ra_cutoff = 0,
   exclude_taxa = NULL,
   library_name = "Lib",
-  complete_clinical = T,
-  filter_summary = T
+  complete_clinical = TRUE,
+  filter_summary = TRUE,
+  count_summary = TRUE
 )
 }
 \arguments{
 \item{otu_tabs}{A single table or list of metagenomic sequencing data. Tables should have a first column of OTU Names and following columns of OTU counts. Column names should be sequencing library names}
 
-\item{tab_names}{names for otu_tabs. These will become the "Tables" column. It is also an option to simply name the OTU tables in the list supplied to otu_tabs}
-
 \item{clinical}{Sequencing level clinical data. Must have a column with unique names for library (sequencing ID)}
+
+\item{tab_names}{names for otu_tabs. These will become the "Tables" column. It is also an option to simply name the OTU tables in the list supplied to otu_tabs}
 
 \item{prev_cutoff}{A prevalence cutoff where *X* percent of libraries must have this taxa or it will be included in the "Other" category}
 
@@ -33,7 +34,9 @@ tidy_micro(
 
 \item{complete_clinical}{Logical; only include columns from OTU tables who's library name is in clinical data}
 
-\item{filter_summary}{Logical; print out summaries of filtering steps}
+\item{filter_summary}{Logical; print out summaries of filtering steps. Ignored \code{prev_cutoff}, \code{ra_cutoff}, and \code{exclude_taxa} are all left as default values}
+
+\item{count_summary}{Logical: print out summary of unique library names and sequencing depth}
 }
 \value{
 A data.frame in the tidy_micro format
@@ -49,24 +52,25 @@ The CLR transformation adds (1 / sequencing depth) to each OTU count for each li
 The list of OTU tables are split, manipulated, and stacked into a data frame using the \code{\link[plyr]{ldply}} function from the \pkg{plyr} package. Names of OTU tables supplied will be the name of their "Table" in the final tidy_micro set
 }
 \examples{
-data(phy); data(cla); data(ord); data(fam); data(clin)
+data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
 
 ## Multiple OTU tables with named list
-otu_tabs <- list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin)
+otu_tabs = list(Phylum = bpd_phy, Class = bpd_cla,
+Order = bpd_ord, Family = bpd_fam)
+set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin)
 
 ## Multiple OTU tables with unnamed list
-unnamed_tabs <- list(phy,cla,ord,fam)
+unnamed_tabs <- list(bpd_phy, bpd_cla, bpd_ord, bpd_fam)
 set <- tidy_micro(otu_tabs = unnamed_tabs,
-tab_names = c("Phylum", "Class", "Order", "Family"), clinical = clin)
+tab_names = c("Phylum", "Class", "Order", "Family"), clinical = bpd_clin)
 
 ## Single OTU table
-set <- tidy_micro(otu_tabs = cla, tab_names = "Class", clinical = clin)
+set <- tidy_micro(otu_tabs = bpd_cla, clinical = bpd_clin, tab_names = "Class")
 
 ## Filtering out low abundance or uninteresting taxa right away
-## WARNING: Only do this if you do not want to calculate alpha diversities with this micro_set
+## WARNING: Only do this if you do not want to calculate alpha diversities with this tidy_micro set
 
-filter_set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin,
+filter_set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin,
               prev_cutoff = 5, ## 5\% of libraries must have this bug, or it is filtered
               ra_cutoff = 1, ## At least 1 libraries must have RA of 1, or it is filtered
               exclude_taxa = c("Unclassified", "Bacteria") ## Unclassified taxa we don't want

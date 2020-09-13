@@ -11,10 +11,11 @@
 #' @param legend_labs The names of the elements within the legend
 #' @return Returns a ggplot that you can add geoms to if you'd like
 #' @examples
-#' data(phy); data(cla); data(ord); data(fam); data(clin)
+#' data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
 #'
-#' otu_tabs = list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin) %>%
+#' otu_tabs <- list(Phylum = bpd_phy, Class = bpd_cla,
+#' Order = bpd_ord, Family = bpd_fam)
+#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin) %>%
 #' filter(day == 7) ## Only including the first week
 #'
 #' ## Creating negative binomial models on filtered tidi_micro set
@@ -28,6 +29,10 @@
 micro_forest <- function(modsum, ..., main, ylab, xlab, subtitle,
                          legend_title, legend_labs){
 
+  if(modsum$Model_Type %nin% c('bb_mod', 'nb_mod')){
+    stop("'mod' must be output from either nb_mods or bb_mods")
+  }
+
   CC <- modsum$Convergent_Summary %>%
     dplyr::mutate(CI.u = stringr::str_sub(.data$CI, start = 2L,
                                           end = stringr::str_length(.data$CI)-1) %>%
@@ -36,9 +41,9 @@ micro_forest <- function(modsum, ..., main, ylab, xlab, subtitle,
                                    end = stringr::str_length(.data$CI)-1) %>%
              stringr::str_split(", ") %>% purrr::map(1) %>% unlist %>% as.numeric
            )
+
   if(any(is.na(CC$CI.u)) | any(is.na(CC$CI.l))){
     warning("Some confidence intervals contain NAs and will be removed.")
-
     CC %<>% dplyr::filter(!is.na(.data$CI.u), !is.na(.data$CI.l))
   }
 

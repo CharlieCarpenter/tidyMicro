@@ -51,10 +51,11 @@ A ggplot you can add geoms to if you'd like
 Display the magnitude of log p-values for each of the taxa in \code{nb_mods} as vertical bars next to each other along the x-axis. The direction of the bars will be determined by the direction of the estimated relationship. The taxa will be color coded by the phylum they belong to, and taxa that have FRD adjusted p-values below your desired significance cutoff for the specified covariate will be labeled
 }
 \examples{
-data(phy); data(cla); data(ord); data(fam); data(clin)
+data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
+otu_tabs = list(Phylum = bpd_phy, Class = bpd_cla,
+Order = bpd_ord, Family = bpd_fam)
 
-otu_tabs = list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin) \%>\%
+set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin) \%>\%
 filter(day == 7) ## Only including the first week
 
 ## Creating negative binomial models on filtered tidy_micro set

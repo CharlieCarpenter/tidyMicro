@@ -19,6 +19,10 @@
 ## Filter functions to be applied within tidy_mibi
 mul_filter <- function(otu, prev_cutoff, ra_cutoff, total, ex, rr){
 
+  if(prev_cutoff > 100 | prev_cutoff < 0) stop("Prevalence cutoff must be between 0 and 100")
+  if(ra_cutoff > 100 | ra_cutoff < 0) stop("Relative abundance cutoff must be between 0 and 100")
+  if(!is.null(ex) & !is.character(ex)) stop("'exclue_taxa' should be a character or left as NULL")
+
   ## Prints out curent filtering Table if any filtering is done
   if( any( c(!is.null(ex), prev_cutoff > 0, ra_cutoff > 0) ) ){
     message("Filter for ", rr, " counts\n\n")
@@ -31,8 +35,6 @@ mul_filter <- function(otu, prev_cutoff, ra_cutoff, total, ex, rr){
 }
 
 prev_filter <- function(otu, prev_cutoff){
-  if ((prev_cutoff > 100) | (prev_cutoff < 0)) stop("Prevalence Cutoff must be between 0 and 100")
-
   starting_cts <- sum(otu)
   prevs <- apply(otu, 2, function(x) 100*sum(x > 0)/length(x))
   ## calculating prevalence and converting to a percent
@@ -80,10 +82,6 @@ prev_filter <- function(otu, prev_cutoff){
 }
 
 ra_filter <- function(otu, ra_cutoff, total) {
-  if ((ra_cutoff > 100) | (ra_cutoff < 0)){
-    stop("Relative abundance cutoff must be between 0 and 100 (%)")
-  }
-
   starting_cts <- sum(otu) ## Starting counts
 
   message("Relative abundance cutoff: ",ra_cutoff,

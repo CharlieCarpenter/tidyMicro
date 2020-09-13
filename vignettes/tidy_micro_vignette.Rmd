@@ -7,20 +7,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 # Installation
 
 ```{r, eval = FALSE}
-install.packages("devtools")
-devtools::install_github("CharlieCarpenter/tidyMicro")
-## Or
+## First
 # install.packages('tidyMicro')
+## Or
+# devtools::install_github("CharlieCarpenter/tidyMicro")
 
 library(tidyMicro); library(magrittr)
 ```
@@ -162,7 +155,7 @@ micro.set %>%
 
 ```{r}
 long_micro <- tidy_micro(otu_tabs = otu_tabs,  ## OTU tables
-                         clinical = clin)      ## clinical Data
+                         clinical = bpd_clin)  ## clinical Data
 ```
 
 #### Three Mode PCA
@@ -189,17 +182,8 @@ long_micro %>%
 ```{r pca3dTime, fig.cap="3D Time PCoA Plot. Plotting principle coordinants collapsing over time axis.", fig.width=6, fig.height=4}
 long_micro %>%
   pca_3d(table = "Family", time_var = day, subject = study_id, 
-         modes = "AC", type = "PCoA")
+         type = "PCoA", legend.title = "Day")
 ```
-
-You can change which axis to collapse over by changing the "modes" to either "BA" or "CB".
-
-```{r pca3DSubj, fig.cap="3D Subject PCoA Plot. Plotting principle coordinants collapsing over subject axis.", fig.width=6, fig.height=4}
-long_micro %>%
-  pca_3d(table = "Family", time_var = day, subject = study_id, 
-         modes = "CB", type = "PCoA")
-```
-
 
 ## Bar Charts {#RA}
 

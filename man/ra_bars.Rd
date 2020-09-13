@@ -51,10 +51,11 @@ Returns a ggplot that you can add geoms to if you'd like
 A function to make stacked bar charts of taxa relative abuncance with the choice to stratify by a variable of interest
 }
 \examples{
-data(phy); data(cla); data(ord); data(fam); data(clin)
+data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
+otu_tabs = list(Phylum = bpd_phy, Class = bpd_cla,
+Order = bpd_ord, Family = bpd_fam)
 
-otu_tabs = list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin) \%>\%
+set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin) \%>\%
 filter(day == 7) ## Only including the first week
 
 ## Full cohort abundance

@@ -51,7 +51,7 @@ A_matricization <- function(micro_set, table, subject, y, time_var){
 
   ## Checking that subjects are consistent across all time points
   if(!all(unique(l_otu$sub) %in% unique(wide_otu$sub))){
-    warning("Subjects are not consistent across time points.\nOnly complete cases will be used.\n",
+    warning("Subjects are not consistent across time points.\nOnly complete cases will be used.",
             call. = FALSE)
   }
 

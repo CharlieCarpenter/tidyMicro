@@ -7,11 +7,11 @@
 #' @return A data frame containing the model estimates for each alpha diversity
 #' @note Be aware of your minimal sequencing depth as this will be the size of all bootstrapped resamples (rarefied).
 #' @examples
-#' data(phy); data(cla); data(ord); data(fam); data(clin)
+#' data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
 #'
-#' otu_tabs <- list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-#'
-#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin) %>%
+#' otu_tabs <- list(Phylum = bpd_phy, Class = bpd_cla,
+#' Order = bpd_ord, Family = bpd_fam)
+#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin) %>%
 #' filter(day == 7) ## Only including first week
 #'
 #' \donttest{
@@ -27,7 +27,7 @@ micro_alpha_reg <- function(alpha_set, table, ...){
     dplyr::filter(.data$Table == table) %>%
     dplyr::distinct(.data$Lib, .keep_all = TRUE)
 
-  alphas <- c("Goods", "Sobs", "Chao1", "ShannonE", "ShannonH", "SimpsonD")
+  alphas <- c("Sobs", "Chao1", "ShannonE", "ShannonH", "SimpsonD")
   alpha_tab <- NULL
   error_tab <- NULL
 

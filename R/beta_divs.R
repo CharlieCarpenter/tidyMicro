@@ -7,10 +7,11 @@
 #' @references \code{\link[vegan]{vegdist}}
 #' @return A symmetrix distance matrix
 #' @examples
-#' data(phy); data(cla); data(ord); data(fam); data(clin)
+#' data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
 #'
-#' otu_tabs = list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin) %>%
+#' otu_tabs <- list(Phylum = bpd_phy, Class = bpd_cla,
+#' Order = bpd_ord, Family = bpd_fam)
+#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin) %>%
 #' filter(day == 7) ## Only including the first week
 #'
 #' ## Bray-Curtis beta diversity

@@ -1,6 +1,6 @@
 Package: tidyMicro
 Title: A Pipeline for Microbiome Analysis and Visualization
-Version: 1.44
+Version: 1.45
 Date: 2020-09-06
 Authors@R: c(person("Charlie", "Carpenter", role = c("aut", "cre"),
            email = "charles.carpenter@cuanschutz.edu"),
@@ -20,14 +20,19 @@ Imports: magrittr (>= 1.5.0), ggrepel (>= 0.8.1), MASS (>= 7.3-51.4),
         plyr (>= 1.8.0), dplyr (>= 0.8.0), ggplot2 (>= 3.2.0), purrr
         (>= 0.3.0), stringr (>= 1.4.0), tibble (>= 2.1.0), tidyr (>=
         1.0.0), scales (>= 1.1.0)
-Suggests: knitr, markdown, roxygen2, rmarkdown
+Suggests: 
+    knitr,
+    markdown,
+    roxygen2,
+    rmarkdown,
+    testthat
 Encoding: UTF-8
 License: GPL-3
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 BugReports: https://github.com/CharlieCarpenter/tidyMicro
 VignetteBuilder: knitr
-NeedsCompilation: nos
+NeedsCompilation: no
 Packaged: 2020-03-26 18:48:17 UTC; charlescarpenter
 Author: Charlie Carpenter [aut, cre],
   Dan Frank [aut],

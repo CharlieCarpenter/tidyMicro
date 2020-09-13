@@ -20,21 +20,28 @@
 #' @author Charlie Carpenter, Dan Frank
 #' @return A ggplot you can add geoms to if you'd like
 #' @examples
-#' data(phy); data(cla); data(ord); data(fam); data(clin)
+#' data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
 #'
-#' otu_tabs = list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin) %>%
+#' otu_tabs <- list(Phylum = bpd_phy, Class = bpd_cla,
+#' Order = bpd_ord, Family = bpd_fam)
+#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin) %>%
 #' filter(day == 7) ## Only including the first week
 #'
 #' set %>% cor_rocky_mtn(table = "Family", weight, cor_label = 0.3)
 #' @export
-cor_rocky_mtn <- function(micro_set, table, x, y = clr, method = "spearman",
+cor_rocky_mtn <- function(micro_set, table, x, y = clr,
+                          method = c("pearson", "kendall", "spearman"),
                           main = NULL, xlab = NULL, ylab = NULL, subtitle = NULL,
                           cut_lines = TRUE, line_text = TRUE,
                           sig_text = TRUE, lwd = 1, cor_label = 0.5,
                           breaks = c(-0.6, -0.5, -0.3, 0.3, 0.5, 0.6)){
 
   if(table %nin% unique(micro_set$Table)) stop("Specified table is not in supplied micro_set")
+
+  if(missing(method)) method <- "spearman"
+  if(method %nin% c("pearson", "kendall", "spearman")){
+    stop("'method' must be one of: pearson, kendall, spearman")
+  }
 
   if(is.null(ylab)) ylab = paste(method, "correlations") %>% stringr::str_to_title()
 

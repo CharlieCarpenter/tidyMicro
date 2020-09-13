@@ -10,22 +10,19 @@ pca_3d(
   time_var,
   subject,
   y = clr,
-  modes = c("AC", "BA", "CB"),
   dist_method = "euclidean",
   type = "PCoA",
   plot_scores = FALSE,
-  n_compA,
-  n_compB,
-  n_compC,
   pch = 16,
   cex.axis = 1,
   cex.lab = 1,
+  cex = 1,
   main = NULL,
   subtitle = NULL,
   scalewt = TRUE,
-  print.legend = FALSE,
-  legend.title = NULL,
-  legend.position = NULL
+  print.legend = TRUE,
+  legend.title = "Time Points",
+  legend.position = "right"
 )
 }
 \arguments{
@@ -39,25 +36,19 @@ pca_3d(
 
 \item{y}{Value to calculate principle components or coordinates on. Default is centered log ratio (recommended)}
 
-\item{modes}{Components of the data to focus on: time, subjects, bacteria, etc. "AC" by default}
-
 \item{dist_method}{Dissimilartiy method to be calculated by \code{\link[vegan]{vegdist}}. Euclidean by default}
 
 \item{type}{"PCA" for principle components or "PCoA" to calculated dissimilarity matrix using \code{\link[vegan]{vegdist}}}
 
 \item{plot_scores}{Plot the scores instead of the principle components}
 
-\item{n_compA}{The number of components along first axis. See details}
-
-\item{n_compB}{The number of components along second axis. See details}
-
-\item{n_compC}{The number of components along third axis. See details}
-
 \item{pch}{Plotting "character", i.e. symbol to use.}
 
 \item{cex.axis}{Options for \code{\link[scatterplot3d]{scatterplot3d}}}
 
 \item{cex.lab}{Options for \code{\link[scatterplot3d]{scatterplot3d}}}
+
+\item{cex}{Options for \code{\link[scatterplot3d]{scatterplot3d}}}
 
 \item{main}{Plot title}
 
@@ -75,19 +66,18 @@ pca_3d(
 Create three dimensional PCA plots from longitudinal data or multiple omics data sets.
 }
 \details{
-Requires that you have columns for subject name and time point. Data must be complete across time points. The function will filter out inconsistent subjects
+Requires that you have separate columns for subject ID and time point. Data must be complete across time points. The function will automatically filter out incomplete cases with a warning message.
 
 When type = "PCoA" the component matrices must be specified prior to the optimization. This is handled automatically.
-
-If n_compA, n_compB, and n_compC aren't specified they will default to the number of complete subjects, the number of taxa, and the number of time points, respectively. This slows down performance slightly, but will not change the results.
 }
 \examples{
-data(phy); data(cla); data(ord); data(fam); data(clin)
+data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
+otu_tabs = list(Phylum = bpd_phy, Class = bpd_cla,
+Order = bpd_ord, Family = bpd_fam)
 
-otu_tabs = list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin)
+set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin)
 
-set \%>\% pca_3d(table = "Family", time_var = day, subject = study_id)
+set \%>\% pca_3d(table = "Family", time_var = day, subject = study_id, legend.title = "Day")
 }
 \references{
 \code{\link[vegan]{vegdist}}

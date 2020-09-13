@@ -11,11 +11,7 @@ three_mode(
   time_var,
   subject,
   y = clr,
-  modes = c("AC", "BA", "CB"),
   plot_scores = F,
-  n_compA,
-  n_compB,
-  n_compC,
   main = NULL,
   subtitle = NULL,
   legend_title = NULL,
@@ -35,15 +31,7 @@ three_mode(
 
 \item{y}{Value to calculate principle components or coordinates on. Default is centered log ratio (recommended)}
 
-\item{modes}{Components of the data to focus on: time, subjects, bacteria, etc.}
-
 \item{plot_scores}{Plot the scores instead of the principle components}
-
-\item{n_compA}{The number of components along first axis. See details}
-
-\item{n_compB}{The number of components along second axis. See details}
-
-\item{n_compC}{The number of components along third axis. See details}
 
 \item{main}{Plot title}
 
@@ -65,10 +53,11 @@ Requires that you have columns for subject name and time point. Data must be com
 If n_compA, n_compB, and n_compC aren't specified they will default to the number of complete subjects, the number of taxa, and the number of time points, respectively. This slows down performance slightly, but will not change the results.
 }
 \examples{
-data(phy); data(cla); data(ord); data(fam); data(clin)
+data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
+otu_tabs = list(Phylum = bpd_phy, Class = bpd_cla,
+Order = bpd_ord, Family = bpd_fam)
 
-otu_tabs = list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin)
+set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin)
 
 set \%>\% three_mode(table = "Family", group = bpd1, time_var = day, subject = study_id)
 }

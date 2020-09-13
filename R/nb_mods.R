@@ -18,10 +18,11 @@
 #' \item{Model_Covs}{Model covariates (used in plotting functions)}
 #' @note False Discovery Rate p-values are calculated using \code{\link[stats]{p.adjust}}. Estimated rate ratios and confidence intervals for interactions in the Estimate_Summary table include all main effects. It is not simply the exponentiated interaction beta, it is the interaction of the sum of the intercept, corresponding main effect betas, and interaction betas
 #' @examples
-#' data(phy); data(cla); data(ord); data(fam); data(clin)
+#' data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
+#' otu_tabs = list(Phylum = bpd_phy, Class = bpd_cla,
+#' Order = bpd_ord, Family = bpd_fam)
 #'
-#' otu_tabs <- list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin) %>%
+#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin) %>%
 #' filter(day == 7)
 #'
 #' nb_fam <- set %>%
@@ -64,8 +65,8 @@ nb_mods <- function(micro_set, table, ..., Offset=TRUE, ref=NULL, SS_type=c(2,3,
     dplyr::distinct(.data$Taxa, .keep_all = T) %>%
     dplyr::pull(.data$FE_Converged)
 
-  cat("\n", sum(con_mod), " taxa converged\n", sep = "")
-  cat(sum(!con_mod), "taxa did not converge\n")
+  message("\n", sum(con_mod), " taxa converged.")
+  message(sum(!con_mod), " taxa did not converge.")
 
   result <- list(Convergent_Summary=Convergent_Models %>%  ## Convergent model summaries
                    dplyr::filter(.data$FE_Converged==T) %>%
@@ -82,7 +83,8 @@ nb_mods <- function(micro_set, table, ..., Offset=TRUE, ref=NULL, SS_type=c(2,3,
                    dplyr::filter(.data$FE_Converged==T) %>%
                    dplyr::select(.data$Taxa, .data$Coef, .data$Intercept,
                                  Estimate = .data$Beta, .data$Cov_Type),
-                 Model_Covs = Cov
+                 Model_Covs = Cov,
+                 Model_Type = "nb_mod"
   )
 
   result

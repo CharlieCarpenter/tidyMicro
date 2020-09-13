@@ -20,13 +20,13 @@ A tibble
 A simple wrapper to extract an OTU table from a tidyMicro set
 }
 \examples{
-data(MRSA_gen); data(MRSA_clin)
+data(mrsa_gen); data(mrsa_clin)
 
 ## Creating tidyMicro set
-set <- tidy_micro(otu_tabs = MRSA_gen, tab_names = "Genus", clinical = MRSA_clin)
+set <- tidy_micro(otu_tabs = mrsa_gen, tab_names = "Genus", clinical = mrsa_clin)
 
 ## Filtering out unwanted OTUs
-filt.set <- otu_filter(set, prev_cutoff = 1, ra_cutoff = 1, filter_summary = F)
+filt.set <- otu_filter(set, prev_cutoff = 1, ra_cutoff = 1, filter_summary = FALSE)
 
 ## Extract filtered OTU table
 filt.otu.cts <- micro_otu(filt.set, table = "Genus")

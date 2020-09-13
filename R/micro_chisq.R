@@ -11,9 +11,9 @@
 #' @references \code{help(chisq.test)}
 #' @return A data from containing the taxa, the chi-squared statistic, and the p-value of the test.
 #' @examples
-#' data(cla); data(clin)
+#' data(bpd_cla); data(bpd_clin)
 #'
-#' set <- tidy_micro(otu_tabs = cla, tab_names = "Class", clinical = clin,
+#' set <- tidy_micro(otu_tabs = bpd_cla, tab_names = "Class", clinical = bpd_clin,
 #' prev_cutoff = 5, ra_cutoff = 0.1, exclude_taxa = c("Unclassified", "Bacteria")) %>%
 #' filter(day == 7) ## Only including the first week
 #'
@@ -37,6 +37,14 @@ micro_chisq <- function(micro_set, table, grp_var, y = bin, mod = NULL, ...){
                           grp_var = !!rlang::enquo(grp_var),
                           y = !!rlang::enquo(y), ...)
   } else { ## Running on taxa that don't converge
+
+    if(!is.null(mod) & ('Model_Type' %nin% names(mod)) ){
+      stop("'mod' must be output from either nb_mods or bb_mods")
+    }
+
+    if(mod$Model_Type %nin% c('bb_mod', 'nb_mod')){
+      stop("'mod' must be output from either nb_mods or bb_mods")
+    }
 
     ## Pulling taxa that didn't converge
     if("FE_Converged" %in% names(mod$RA_Summary)){

@@ -10,10 +10,11 @@
 #' @return A tidy_micro set with alpha diversity columns added in to the left of clinical data
 #' @note Be aware of your minimal sequencing depth as this will be the size of all bootstrapped resamples (rarefied).
 #' @examples
-#' data(phy); data(cla); data(ord); data(fam); data(clin)
-#' otu_tabs = list(Phylum = phy, Class = cla, Order = ord, Family = fam)
+#' data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
+#' otu_tabs = list(Phylum = bpd_phy, Class = bpd_cla,
+#' Order = bpd_ord, Family = bpd_fam)
 #'
-#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin) %>%
+#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin) %>%
 #' filter(day == 7) ## Only including the first week
 #'
 #' \donttest{
@@ -30,6 +31,8 @@ alpha_div <- function(micro_set, table = NULL, iter = 100, min_depth = 0, min_go
     warning(paste0("The minimum Library size is ", min(micro_set$Total), ".\n"))
   }
 
+  if(max(micro_set$Total) < min_depth) stop("'min_depth' is larger than all sequencing depths")
+
   if(!is.null(table)){ ## Specific table
     if(table %nin% unique(micro_set$Table)) stop("Specified table is not in supplied micro_set")
     micro_set %<>%
@@ -38,11 +41,15 @@ alpha_div <- function(micro_set, table = NULL, iter = 100, min_depth = 0, min_go
   }
 
   ## Calculating alpha diversities
-  tidy_alpha <- micro_set %>%
+  good_set <- micro_set %>%
     ## Filtering out based on minimum sequencing depth
     dplyr::filter(.data$Total > min_depth) %>%
-    dplyr::left_join(goods(micro_set, iter), by = c("Table", "Lib")) %>%
+    dplyr::left_join(goods(micro_set, iter), by = c("Table", "Lib"))
+
+  if(max(good_set$Goods) < min_goods) stop("Good's coverage is below 'min_goods for all libraries")
+
     ## Filtering out based on minimum Good's coverage
+  tidy_alpha <- good_set %>%
     dplyr::filter(.data$Goods > min_goods) %>%
     dplyr::left_join(sobs(micro_set, iter), by = c("Table", "Lib")) %>%
     dplyr::left_join(chao1(micro_set, iter), by = c("Table", "Lib")) %>%

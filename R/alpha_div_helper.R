@@ -107,7 +107,6 @@ goods <- function(data_set, iter){
 }
 
 ## ShannonE ----
-
 # Uses log2
 shannonE <- function(data_set, iter){
 

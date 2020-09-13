@@ -16,10 +16,11 @@
 #' @return A ggplot you can add geoms to if you'd like
 #' @author Charlie Carpenter, Rachel Johnson, Dan Frank
 #' @examples
-#' data(phy); data(cla); data(ord); data(fam); data(clin)
+#' data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
+#' otu_tabs = list(Phylum = bpd_phy, Class = bpd_cla,
+#' Order = bpd_ord, Family = bpd_fam)
 #'
-#' otu_tabs = list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin) %>%
+#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin) %>%
 #' filter(day == 7) ## Only including the first week
 #'
 #' ## Creating negative binomial models on filtered tidy_micro set
@@ -33,6 +34,13 @@ micro_rocky_mtn <- function(modsum, ..., main = NULL,
                          ylab = NULL, subtitle = NULL,
                          pval_lines = TRUE, pval_text = TRUE, sig_text = TRUE,
                          facet_labels = NULL, alpha = 0.05, lwd = 2, lty = 1){
+
+  if('Model_Type' %nin% names(modsum)){
+    stop("'modsum' must be output from either nb_mods or bb_mods")
+  }
+  if(modsum$Model_Type %nin% c('nb_mod', 'bb_mod') ){
+    stop("'modsum' must be output from either nb_mods or bb_mods")
+  }
 
   if(missing(...)) stop("NB_RockMtn requires a model coefficient")
   if(is.null(ylab)) ylab <- expression("log"[10]*" p-value")

@@ -20,7 +20,7 @@
 
 ## Naming global variables
   ## These are all taxa information pieces that we enquote (e.g. rlang::enquo(ra))
-utils::globalVariables(c("bin", "clr", "ra"))
+utils::globalVariables(c("cts", "bin", "clr", "ra"))
 
 my_clr <- function(otu,total){
 
@@ -80,6 +80,10 @@ mul_otu_long <- function(in_OTU, .meta){
   }
 
   Lib <- colnames(in_OTU)[-1] ## Library Names
+  if(!any(Lib %in% .meta$Lib)){
+    stop("No library names match the column names of provided OTU table")
+  }
+
   otu <- t(in_OTU)[-1,] %>% ## removing OTU Names
     apply(2, function(x) as.numeric(x)) %>%  ## Making cols numeric
     as.data.frame

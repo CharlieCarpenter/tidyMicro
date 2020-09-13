@@ -29,9 +29,9 @@ Run Chi-Squared tests for presence / absence of each taxa in you data set, or ea
 If the taxa are present or absent in every subject the chi-sqared test will not but run. The returned chi-sqared stat will either be "All Absent" or "All Present." This will be clear in the output
 }
 \examples{
-data(cla); data(clin)
+data(bpd_cla); data(bpd_clin)
 
-set <- tidy_micro(otu_tabs = cla, tab_names = "Class", clinical = clin,
+set <- tidy_micro(otu_tabs = bpd_cla, tab_names = "Class", clinical = bpd_clin,
 prev_cutoff = 5, ra_cutoff = 0.1, exclude_taxa = c("Unclassified", "Bacteria")) \%>\%
 filter(day == 7) ## Only including the first week
 

@@ -2,14 +2,15 @@
 #' @name tidy_micro
 #' @description A function to take any number of OTU tables (or other sequencing data tables), calculate taxa prevalence, relative abundance, and a CLR transformation, and finally merges clinical data
 #' @param otu_tabs A single table or list of metagenomic sequencing data. Tables should have a first column of OTU Names and following columns of OTU counts. Column names should be sequencing library names
-#' @param tab_names names for otu_tabs. These will become the "Tables" column. It is also an option to simply name the OTU tables in the list supplied to otu_tabs
 #' @param clinical Sequencing level clinical data. Must have a column with unique names for library (sequencing ID)
+#' @param tab_names names for otu_tabs. These will become the "Tables" column. It is also an option to simply name the OTU tables in the list supplied to otu_tabs
 #' @param prev_cutoff A prevalence cutoff where *X* percent of libraries must have this taxa or it will be included in the "Other" category
 #' @param ra_cutoff A relative abundance (RA) cutoff where at least one library must have a RA above the cutoff or the taxa will be included in the "Other" category
 #' @param exclude_taxa A character vector used to specify any taxa that you would like to included in the "Other" category. Taxa specified will be included in "Other" for every OTU table provided
 #' @param library_name The column name containing sequencing library names. Should match with column names of supplied OTU tables (after first column)
 #' @param complete_clinical Logical; only include columns from OTU tables who's library name is in clinical data
-#' @param filter_summary Logical; print out summaries of filtering steps
+#' @param filter_summary Logical; print out summaries of filtering steps. Ignored \code{prev_cutoff}, \code{ra_cutoff}, and \code{exclude_taxa} are all left as default values
+#' @param count_summary Logical: print out summary of unique library names and sequencing depth
 #' @details Column names of the OTU tables must be the same for each table, and these should be the the library names inside of your clinical. Please see the \link{vignette} for a detailed description.
 #'
 #' The CLR transformation adds (1 / sequencing depth) to each OTU count for each library before centering and log transforming in order to avoid issues with 0 counts.
@@ -20,36 +21,39 @@
 #' @import magrittr tidyverse
 #' @importFrom rlang .data
 #' @examples
-#' data(phy); data(cla); data(ord); data(fam); data(clin)
+#' data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
 #'
 #' ## Multiple OTU tables with named list
-#' otu_tabs <- list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin)
+#' otu_tabs = list(Phylum = bpd_phy, Class = bpd_cla,
+#' Order = bpd_ord, Family = bpd_fam)
+#' set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin)
 #'
 #' ## Multiple OTU tables with unnamed list
-#' unnamed_tabs <- list(phy,cla,ord,fam)
+#' unnamed_tabs <- list(bpd_phy, bpd_cla, bpd_ord, bpd_fam)
 #' set <- tidy_micro(otu_tabs = unnamed_tabs,
-#' tab_names = c("Phylum", "Class", "Order", "Family"), clinical = clin)
+#' tab_names = c("Phylum", "Class", "Order", "Family"), clinical = bpd_clin)
 #'
 #' ## Single OTU table
-#' set <- tidy_micro(otu_tabs = cla, tab_names = "Class", clinical = clin)
+#' set <- tidy_micro(otu_tabs = bpd_cla, clinical = bpd_clin, tab_names = "Class")
 #'
 #' ## Filtering out low abundance or uninteresting taxa right away
-#' ## WARNING: Only do this if you do not want to calculate alpha diversities with this micro_set
+#' ## WARNING: Only do this if you do not want to calculate alpha diversities with this tidy_micro set
 #'
-#' filter_set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin,
+#' filter_set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin,
 #'               prev_cutoff = 5, ## 5% of libraries must have this bug, or it is filtered
 #'               ra_cutoff = 1, ## At least 1 libraries must have RA of 1, or it is filtered
 #'               exclude_taxa = c("Unclassified", "Bacteria") ## Unclassified taxa we don't want
 #'               )
 #' @export
-tidy_micro <- function(otu_tabs, tab_names, clinical,
+tidy_micro <- function(otu_tabs, clinical, tab_names,
                        prev_cutoff = 0.0, ra_cutoff = 0.0, exclude_taxa = NULL,
-                       library_name = "Lib", complete_clinical = T, filter_summary = T){
+                       library_name = "Lib", complete_clinical = TRUE, filter_summary = TRUE,
+                       count_summary = TRUE){
 
   if(library_name %nin% names(clinical)) stop("Must provide 'library_name' matching column name of sequencing IDs from clinical data")
 
   names(clinical)[names(clinical) == library_name] <- "Lib"
+  if(library_name != "Lib") warning(paste0("Renaming '", library_name, "' to 'Lib'") )
 
   if(is.data.frame(otu_tabs) | is.matrix(otu_tabs)){ ## One OTU table
     if(length(tab_names) != 1) {
@@ -86,18 +90,18 @@ tidy_micro <- function(otu_tabs, tab_names, clinical,
     }
   }
 
-  ## Counts subjects
-  message("Contains ",length(unique(l_otu$Lib))," libraries from OTU files.\n")
+  if(count_summary){
+    ## Counts subjects
+    message("Contains ",length(unique(l_otu$Lib))," libraries from OTU files.\n")
 
-  ss <- l_otu %>%
-    dplyr::distinct(.data$Lib, .keep_all = T) %>%
-    dplyr::pull(.data$Total) %>%
-    summary
+    ss <- l_otu %>%
+      dplyr::distinct(.data$Lib, .keep_all = T) %>%
+      dplyr::pull(.data$Total) %>%
+      summary
 
-  ## Printing out a summary of the sequencing depth
-  message("Summary of sequencing depth:\n"); print(ss)
-
-  if(library_name != "Lib") warning(paste0("Renaming '", library_name, "' to 'Lib'") )
+    ## Printing out a summary of the sequencing depth
+    message("Summary of sequencing depth:"); print(ss)
+  }
 
   l_otu %<>%
     dplyr::mutate(Table = factor(.data$Table), Taxa = factor(.data$Taxa))

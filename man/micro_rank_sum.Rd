@@ -29,9 +29,9 @@ Runs a rank sum test for each taxa within an OTU table or each taxa that didn't 
 The grp_var must have a least 2 levels. For a 2 level factor a Mann-Whitney test will be calculated through \code{\link[stats]{wilcox.test}}, and for 3 or more levels a Kruskal-Wallis test will be run throuh \code{\link[stats]{kruskal.test}}
 }
 \examples{
-data(cla); data(clin)
+data(bpd_cla); data(bpd_clin)
 
-set <- tidy_micro(otu_tabs = cla, tab_names = "Class", clinical = clin,
+set <- tidy_micro(otu_tabs = bpd_cla, tab_names = "Class", clinical = bpd_clin,
 prev_cutoff = 5, ra_cutoff = 0.1, exclude_taxa = c("Unclassified", "Bacteria")) \%>\%
 filter(day == 7) ## Only including the first week
 

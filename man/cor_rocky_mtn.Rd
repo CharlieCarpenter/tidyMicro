@@ -9,7 +9,7 @@ cor_rocky_mtn(
   table,
   x,
   y = clr,
-  method = "spearman",
+  method = c("pearson", "kendall", "spearman"),
   main = NULL,
   xlab = NULL,
   ylab = NULL,
@@ -60,10 +60,11 @@ A ggplot you can add geoms to if you'd like
 Calculate the correlation between the relative abundance of each taxa within a specified table and a continuous variable of interest. Correlation is calculated by \code{\link[stats]{cor}}. By default, Kendall's correlation is used to account for the prevalence of ties that often occur (lots of 0s)
 }
 \examples{
-data(phy); data(cla); data(ord); data(fam); data(clin)
+data(bpd_phy); data(bpd_cla); data(bpd_ord); data(bpd_fam); data(bpd_clin)
 
-otu_tabs = list(Phylum = phy, Class = cla, Order = ord, Family = fam)
-set <- tidy_micro(otu_tabs = otu_tabs, clinical = clin) \%>\%
+otu_tabs <- list(Phylum = bpd_phy, Class = bpd_cla,
+Order = bpd_ord, Family = bpd_fam)
+set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin) \%>\%
 filter(day == 7) ## Only including the first week
 
 set \%>\% cor_rocky_mtn(table = "Family", weight, cor_label = 0.3)
