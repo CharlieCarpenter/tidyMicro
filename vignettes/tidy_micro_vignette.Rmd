@@ -175,9 +175,9 @@ long_micro %>%
 
 #### 3D PCA
   
-  These 3D plots collapse over a chosen dimension of variation (e.g. time, subject, or taxa) and perform principle component / coordinate analyses on the remaining two dimensions.
+  These 3D plots are a method for making PCA or PCoA plots for data with repeated measures. They will help us view trends within each time point, or help us understand when large changes in community composition occur. For instance, we may be able to detect linear trends within a single time point, or see that composition makes a large departure at a specific time point. Unfortunately, we do not see dramatic shifts in composition from week to week in this data set.
   
-  In order to make the function work we need to supply a subject, time, and the number of time points as in the `three_mode` function. 
+  In order to make the function work properly we need to supply a subject and time column.
   
 ```{r pca3dTime, fig.cap="3D Time PCoA Plot. Plotting principle coordinants collapsing over time axis.", fig.width=6, fig.height=4}
 long_micro %>%
