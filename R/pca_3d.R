@@ -34,6 +34,7 @@
 #' set <- tidy_micro(otu_tabs = otu_tabs, clinical = bpd_clin)
 #'
 #' set %>% pca_3d(table = "Family", time_var = day, subject = study_id, legend.title = "Day")
+#' @importFrom scatterplot3d scatterplot3d
 #' @export
 pca_3d <- function(micro_set, table, time_var, subject, y = clr,
                    dist_method = "euclidean", type = "PCoA", plot_scores = FALSE,
