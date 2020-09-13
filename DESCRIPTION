@@ -1,6 +1,6 @@
 Package: tidyMicro
 Title: A Pipeline for Microbiome Analysis and Visualization
-Version: 1.45
+Version: 1.47
 Date: 2020-09-06
 Authors@R: c(person("Charlie", "Carpenter", role = c("aut", "cre"),
            email = "charles.carpenter@cuanschutz.edu"),
@@ -36,5 +36,5 @@ NeedsCompilation: no
 Packaged: 2020-03-26 18:48:17 UTC; charlescarpenter
 Author: Charlie Carpenter [aut, cre],
   Dan Frank [aut],
-  Kayla Williamson [ctb],
+  Kayla Williamson [aut],
   Rachel Johnson [ctb]
