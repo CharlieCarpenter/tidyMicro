@@ -21,7 +21,7 @@
 #' (ch <- cor_heatmap(set, table = "Family", weight, gestational_age))
 #'
 #' # Much better
-#' ch$data$Taxa %<>% pull_lev(4)
+#' ch$data$Taxa <- pull_lev(ch$data$Taxa,4)
 #' ch
 #' @export
 pull_lev <- function(Taxa, l, sep = "/"){
