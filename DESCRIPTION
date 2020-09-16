@@ -1,6 +1,6 @@
 Package: tidyMicro
 Title: A Pipeline for Microbiome Analysis and Visualization
-Version: 1.47
+Version: 1.48
 Date: 2020-09-06
 Authors@R: c(person("Charlie", "Carpenter", role = c("aut", "cre"),
            email = "charles.carpenter@cuanschutz.edu"),
