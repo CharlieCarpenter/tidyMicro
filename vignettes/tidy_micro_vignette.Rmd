@@ -485,37 +485,23 @@ bb_int <- micro.filt %>%
   The functions [nb_mods](#NB) and [bb_mods](#BB) will create these stacked bar charts based on the output of from `nb_mods` and `bb_mods`, respectively. They requires the name of a covariate in your model and can create plots based on main effects or interactions. If a continuous variable is one of the supplied covariates there are two options for visualization available through the `quant_style` argument. You can either visualize two points as two separate bars (`quant_style = "discrete"`) or visualize the continuous change (`quant_style = "continuous"`). By default the functions will use the first and third quartiles of the continuous variable as your endpoints, but this can be changed through the `range` option. `nb_bars` and `bb_bars` also give you the ability to aggregate estimated RA into and "Other" category just like the [ra_bars](#RA) function.
   
 ```{r nbFamBarCharts, warning=FALSE, fig.cap="Negative Binomial Bar Charts. Stacked bar charts of negative binomial estimated taxa RA by BPD severity.", fig.width=6, fig.height=4}
-nb_fam %>% nb_bars(bpd1,                 ## Covariate of interest
-                   top_taxa = 5,         ## How many named taxa we want
+nb_fam %>% nb_bars(bpd1,                   ## Covariate of interest
+                   top_taxa = 5,           ## How many named taxa we want
                    xlab = "Group", 
                    xaxis = c("1","2","3")) ## Labels
 ```
 
 #### Object Flexibility
 
-  Including every taxonomic level in your legend often looks cluttered. The [nb_bars](#NB) and [bb_bars](#BB) functions use the `Model_Coef` data frame from `nb_mods` and `bb_mods` output to create their bar charts. You can manipulate the taxa names here to avoid confusion further up in the pipeline. 
+  Including every taxonomic level in your legend often looks cluttered. Like almost all of the plotting functions in `tidyMicro`, [nb_bars](#NB) and [bb_bars](#BB) output `ggplots`. This means we can minipulate the parts the ggplot easily. It is best to save these types of manipulations as final steps to avoid confusion or errors furthur up the pipeline.
   
 ```{r manipulatedSBC, warning=FALSE, fig.width=6, fig.height=4}
-nb_fam$Model_Coef$Taxa %<>% 
-  stringr::str_split("/") %>%  ## Splitting by "/" in taxa names
-  lapply(function(x) x[length(x)]) %>% ## selecting piece after the last "/"
-  unlist ## Unlisting to put back into data frame
+nb_plot <- nb_fam %>% 
+  nb_bars(bpd1, top_taxa = 5, 
+          xlab = "Group", main = "Cleaner Legend")
 
-## Reordering to put "Other" at the bottom of the legend
-## our functions usually do this automatically, but we'll need to do 
-## this externally since we are messing with the output
-non.other <- nb_fam$Model_Coef %>% 
-  filter(Taxa != "Other") %>% 
-  arrange(Taxa) %>% 
-  distinct(Taxa) %>%
-  pull(Taxa)
-
-nb_fam$Model_Coef$Taxa <- factor(nb_fam$Model_Coef$Taxa,
-                                 levels = c(non.other, "Other"))
-
-nb_fam %>% nb_bars(bpd1,                 ## Covariate of interest
-                   top_taxa = 5,         ## How many named taxa we want
-                   xlab = "BPD Severity", main = "Cleaner Legend") ## Labels
+nb_plot$data$Taxa %<>% pull_lev(4)
+nb_plot
 ```
   
 ### Rocky Mountain Plots
