@@ -181,7 +181,11 @@ nb_bars_qcint <- function(modsum, ..., cc, range, quant_style, top_taxa, RA, spe
     dplyr::filter(.data$Coef == "(Intercept)" |
                     stringr::str_detect(.data$Coef, cov_str(...)[1]) |
                     stringr::str_detect(.data$Coef, cov_str(...)[2])) %>%
-    Taxa_ord() %>%
+    Taxa_ord()
+  tc <- msum %>% dplyr::add_count(Taxa)
+  if(length(unique(tc$n)) > 1) stop("Repeated Taxa names exist in model's 'Model_Coef'")
+
+  msum %<>%
     plyr::ddply(~ .data$Taxa, qcint_est, modsum$Model_Covs,
                 quant_style, range, ...) %>%
     dplyr::rename(Taxa = .data$`.data$Taxa`)
@@ -345,9 +349,9 @@ qcint_bars <- function(msum, m_cov, quant_style, xaxis, main, xlab, ylab,
                        subtitle, facet_labels, facet_layout, lines, ...){
 
   if(is.null(facet_labels)){
-    if(is.factor(m_cov[,cov_str(...)[1]])){
-      facet_labels <- levels(m_cov[,cov_str(...)[1]])
-    } else facet_labels <- levels(m_cov[,cov_str(...)[2]])
+    if(is.numeric(m_cov[,cov_str(...)[1]])){
+      facet_labels <- sort(unique(m_cov[,cov_str(...)[2]]))
+    } else facet_labels <- sort(unique(m_cov[,cov_str(...)[1]]))
   }
 
   names(facet_labels) <- levels(msum$Fac)
@@ -776,12 +780,12 @@ ccint_est <- function(msum, l1, l2, ...){
 qcint_est <- function(msum, m_cov, quant_style, range, ...){
 
   if(quant_style == "continuous"){
-    if(is.factor(m_cov[,cov_str(...)[1]])) {
-      levs <- levels(m_cov[,cov_str(...)[1]])
-      ll <- paste(cov_str(...)[1], levs, sep = "")
-    } else {
-      levs <- levels(m_cov[,cov_str(...)[2]])
+    if(is.numeric(m_cov[,cov_str(...)[1]])) {
+      levs <- sort(unique(m_cov[,cov_str(...)[2]]))
       ll <- paste(cov_str(...)[2], levs, sep = "")
+    } else {
+      levs <- sort(unique(m_cov[,cov_str(...)[1]]))
+      ll <- paste(cov_str(...)[1], levs, sep = "")
     }
 
     RR <- seq(range[1], range[2], length.out = 10)
@@ -808,17 +812,18 @@ qcint_est <- function(msum, m_cov, quant_style, range, ...){
   }
 
   if(quant_style == "discrete"){
-    if(is.factor(m_cov[,cov_str(...)[1]])) {
-      levs <- levels(m_cov[,cov_str(...)[1]])
-      ll <- paste(cov_str(...)[1], levs, sep = "")
-    } else {
-      levs <- levels(m_cov[,cov_str(...)[2]])
+    if(is.numeric(m_cov[,cov_str(...)[1]])) {
+      levs <- sort(unique(m_cov[,cov_str(...)[2]]))
       ll <- paste(cov_str(...)[2], levs, sep = "")
+    } else {
+      levs <- sort(unique(m_cov[,cov_str(...)[1]]))
+      ll <- paste(cov_str(...)[1], levs, sep = "")
     }
 
-    low <- exp( unique(msum$Intercept) +
+    low <- high <- numeric(length(ll))
+    low[1] <- exp( unique(msum$Intercept) +
                   msum$Estimate[msum$Cov_Type == "quant"]*range[1] + log(100) )
-    high <- exp( unique(msum$Intercept) +
+    high[1] <- exp( unique(msum$Intercept) +
                    msum$Estimate[msum$Cov_Type == "quant"]*range[2] + log(100) )
 
     for(i in seq(2,length(ll))){ ## starting at the second level (one below reference)
@@ -842,14 +847,13 @@ qcint_est <- function(msum, m_cov, quant_style, range, ...){
     }
 
     Est <- data.frame(
-      Taxa = msum$Taxa,
       Est = c(low,high),
       Fac = levs,
       HL = rep(c("Low","high"), each = length(levs))
     )
   }
 
-  Est
+  Est %<>% mutate(Fac = factor(.data$Fac))
 }
 
 qqint_est <- function(msum, range, ...){
