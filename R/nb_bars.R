@@ -60,7 +60,7 @@ nb_bars <- function(modsum, ..., range, quant_style = c("continuous", "discrete"
   if(length(unique(tc$n)) > 1) stop("Repeated Taxa names exist in model's 'Model_Coef'")
 
   if(cc == "categ") {
-    if(missing(xaxis)) xaxis <- modsum$Model_Covs[,cov_str(...)] %>% levels
+    if(missing(xaxis)) xaxis <- sort(unique(modsum$Model_Covs[,cov_str(...)]))
 
     nb_bars_categ(modsum, ..., cc = cc, top_taxa = top_taxa, lines = lines,
                   RA = RA, specific_taxa = specific_taxa, main = main,
@@ -80,7 +80,7 @@ nb_bars <- function(modsum, ..., range, quant_style = c("continuous", "discrete"
                   lines = lines, RA = RA, specific_taxa = specific_taxa, main = main,
                   xaxis = xaxis, xlab = xlab, ylab = ylab, subtitle = subtitle)
   } else if(cc == "c*c.int"){
-    if(missing(xaxis)) xaxis <- modsum$Model_Covs[,cov_str(...)[1]] %>% levels
+    if(missing(xaxis)) xaxis <- sort(unique(modsum$Model_Covs[,cov_str(...)[1]]))
 
     nb_bars_ccint(modsum, ..., cc = cc, top_taxa = top_taxa,
                    RA = RA, specific_taxa = specific_taxa, main = main, lines = lines,
