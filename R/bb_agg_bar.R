@@ -669,9 +669,8 @@ bb_qcint_est <- function(msum, m_cov, quant_style, range, ...){
     }
 
     Est <- data.frame(
-      Taxa = unique(msum$Taxa),
       Est = c(low,high) * 100,
-      Fac = levs,
+      Fac = factor(levs),
       HL = rep(c("Low","high"), each = length(levs))
     )
   }

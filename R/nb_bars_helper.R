@@ -844,12 +844,12 @@ qcint_est <- function(msum, m_cov, quant_style, range, ...){
 
     Est <- data.frame(
       Est = c(low,high),
-      Fac = levs,
+      Fac = factor(levs),
       HL = rep(c("Low","high"), each = length(levs))
     )
   }
 
-  Est %<>% mutate(Fac = factor(.data$Fac))
+  Est
 }
 
 qqint_est <- function(msum, range, ...){

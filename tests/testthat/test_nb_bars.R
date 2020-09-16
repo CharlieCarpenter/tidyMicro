@@ -23,7 +23,7 @@ test_that("no repeated taxa in Model_Coef", {
                           filter_summary = F)
 
   nb.int <- nb_mods(tidy.mrsa, table = "Genus", Aureus_Positive*Age)
-  nb.int$Model_Coef$Taxa %<>% pull.lev(6)
+  nb.int$Model_Coef$Taxa %<>% pull_lev(6)
 
   expect_error(nb_bars(nb.int, Aureus_Positive*Age, top_taxa = 10, quant_style = 'discrete'),
     "Repeated Taxa names exist in model's 'Model_Coef'")
