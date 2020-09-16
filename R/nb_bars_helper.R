@@ -181,11 +181,7 @@ nb_bars_qcint <- function(modsum, ..., cc, range, quant_style, top_taxa, RA, spe
     dplyr::filter(.data$Coef == "(Intercept)" |
                     stringr::str_detect(.data$Coef, cov_str(...)[1]) |
                     stringr::str_detect(.data$Coef, cov_str(...)[2])) %>%
-    Taxa_ord()
-  tc <- msum %>% dplyr::add_count(Taxa)
-  if(length(unique(tc$n)) > 1) stop("Repeated Taxa names exist in model's 'Model_Coef'")
-
-  msum %<>%
+    Taxa_ord() %>%
     plyr::ddply(~ .data$Taxa, qcint_est, modsum$Model_Covs,
                 quant_style, range, ...) %>%
     dplyr::rename(Taxa = .data$`.data$Taxa`)

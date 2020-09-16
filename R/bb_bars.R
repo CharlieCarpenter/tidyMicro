@@ -57,6 +57,9 @@ bb_bars <- function(modsum, ..., range, quant_style = c("continuous", "discrete"
   if(missing(facet_labels)) facet_labels <- NULL
   if(facet_layout %nin% c(1,2)) stop("facet_layout must be either 1 or 2")
 
+  tc <- modsum$Model_Coef %>% dplyr::add_count(Taxa)
+  if(length(unique(tc$n)) > 1) stop("Repeated Taxa names exist in model's 'Model_Coef'")
+
   if(cc == "categ") {
     if(missing(xaxis)) xaxis <- modsum$Model_Covs[,cov_str(...)] %>% levels
 
