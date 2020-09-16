@@ -13,3 +13,18 @@ test_that("nb_bars shouldn't run on bb_bars output", {
   bb <- bb_mods(set, table = "P", bpd1)
   expect_error( nb_bars(bb, bpd1), "'modsum' should be the output from 'nb_mods'")
 })
+
+test_that("no repeated taxa in Model_Coef", {
+  data("mrsa_clin"); data("mrsa_gen")
+
+  tidy.mrsa <- tidy_micro(mrsa_gen, mrsa_clin, "Genus", count_summary = F,
+                          prev_cutoff = 1, ra_cutoff = 1,
+                          exclude_taxa = c("Unclassified", "Bacteria"),
+                          filter_summary = F)
+
+  nb.int <- nb_mods(tidy.mrsa, table = "Genus", Aureus_Positive*Age)
+  nb.int$Model_Coef$Taxa %<>% pull.lev(6)
+
+  expect_error(nb_bars(nb.int, Aureus_Positive*Age, top_taxa = 10, quant_style = 'discrete'),
+    "Repeated Taxa names exist in model's 'Model_Coef'")
+})
