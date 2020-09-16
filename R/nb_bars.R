@@ -56,7 +56,7 @@ nb_bars <- function(modsum, ..., range, quant_style = c("continuous", "discrete"
   if(missing(quant_style)) quant_style <- "continuous"
   if(facet_layout %nin% c(1,2)) stop("facet_layout must be either 1 or 2")
 
-  tc <- modsum$Model_Coef %>% dplyr::add_count(Taxa)
+  tc <- modsum$Model_Coef %>% dplyr::add_count(.data$Taxa)
   if(length(unique(tc$n)) > 1) stop("Repeated Taxa names exist in model's 'Model_Coef'")
 
   if(cc == "categ") {
