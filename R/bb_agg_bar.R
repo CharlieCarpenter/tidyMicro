@@ -590,12 +590,12 @@ bb_ccint_est <- function(msum, l1, l2){
 bb_qcint_est <- function(msum, m_cov, quant_style, range, ...){
 
   if(quant_style == "continuous"){
-    if(is.factor(m_cov[,cov_str(...)[1]])) {
-      levs <- levels(m_cov[,cov_str(...)[1]])
-      ll <- paste(cov_str(...)[1], levs, sep = "")
-    } else {
-      levs <- levels(m_cov[,cov_str(...)[2]])
+    if(is.numeric(m_cov[,cov_str(...)[1]])) {
+      levs <- sort(unique(m_cov[,cov_str(...)[2]]))
       ll <- paste(cov_str(...)[2], levs, sep = "")
+    } else {
+      levs <- sort(unique(m_cov[,cov_str(...)[1]]))
+      ll <- paste(cov_str(...)[1], levs, sep = "")
     }
 
     RR <- seq(range[1], range[2], length.out = 10)
@@ -627,12 +627,12 @@ bb_qcint_est <- function(msum, m_cov, quant_style, range, ...){
   }
 
   if(quant_style == "discrete"){
-    if(is.factor(m_cov[,cov_str(...)[1]])) {
-      levs <- levels(m_cov[,cov_str(...)[1]])
-      ll <- paste(cov_str(...)[1], levs, sep = "")
-    } else {
-      levs <- levels(m_cov[,cov_str(...)[2]])
+    if(is.numeric(m_cov[,cov_str(...)[1]])) {
+      levs <- sort(unique(m_cov[,cov_str(...)[2]]))
       ll <- paste(cov_str(...)[2], levs, sep = "")
+    } else {
+      levs <- sort(unique(m_cov[,cov_str(...)[1]]))
+      ll <- paste(cov_str(...)[1], levs, sep = "")
     }
 
     low <- exp( unique(msum$Intercept) +
