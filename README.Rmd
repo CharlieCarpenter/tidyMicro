@@ -22,7 +22,13 @@ The goal of tidyMicro is to provide a cohesive pipeline for microbiome data anal
 
 ## Installation
 
-You can install the released version of tidyMicro from [CRAN](https://CRAN.R-project.org) with:
+You can install the latest version of tidyMicro from this GitHub using
+``` r
+devtools::install_github("CharlieCarpenter/tidyMicro", 
+                         build_vignettes = TRUE) ## Recommended
+```
+
+Or you can install the latest release of tidyMicro from [CRAN](https://CRAN.R-project.org) using
 
 ``` r
 install.packages("tidyMicro")
