@@ -19,7 +19,7 @@ A 52x15 data.frame
   \item{\code{MRSA_Postive}}{Whether or not the subject was MRSA positive. 'Y' = MRSA positive}
   \item{\code{Nasal_Steroids}}{Whether or not the subject was using nasal steroids. 'N' = No, 'Y' = Yes}
   \item{\code{Nursing_Home}}{Whether or not the subject was staying in a nursing home. 'N' = No, 'Y' = Yes}
-  \item{\code{Sex}{Subject sex. All male as subjects were matched on sex}}
+  \item{\code{Sex}}{Subject sex. All male as subjects were matched on sex}
   \item{\code{Smoking}}{Subject's smoking status. 'F' = Former, 'N' = Never, 'Y' = Yes/current smoker}
 
 }
