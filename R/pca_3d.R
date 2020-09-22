@@ -63,8 +63,6 @@ pca_3d <- function(micro_set, table, time_var, subject, y = clr,
     stop("time_var is not a column name in supplied micro_set")
   }
 
-
-
   ## Making the wide otu format that is needed for U_matrices
   wide_otu <- micro_set %>%
     A_matricization(table = table, subject = !!rlang::enquo(subject),
@@ -92,8 +90,10 @@ pca_3d <- function(micro_set, table, time_var, subject, y = clr,
                             r1 = n_compA, r2 = n_compB, r3 = n_compC,
                             start = 0, conv = 0.0000000000000002)
     T3P <- T3_plots(r1 = n_compA, r2 = n_compB, r3 = n_compC,
-                    T3P, modes, plot_scores)[modes] %>%
-      as.data.frame
+                    T3P, modes, plot_scores)
+
+    pv <- round(100* T3P$B_eig[1:3]/sum(T3P$B_eig), 2)
+    T3P <- T3P[modes] %>% as.data.frame
   } else if(type == "PCoA"){
 
     T3 <- U_matrices(wide_otu, method = dist_method, n_compA, n_compB, n_compC,
@@ -105,15 +105,18 @@ pca_3d <- function(micro_set, table, time_var, subject, y = clr,
                             start = 2, conv = 0.0000000000000002,
                             T3$A,T3$B,T3$C,T3$G)
     T3P <- T3_plots(r1 = n_compA, r2 = n_compB, r3 = n_compC,
-                    T3P, modes, plot_scores)[modes] %>%
-      as.data.frame
+                    T3P, modes, plot_scores)
+
+    pv <- round(100* T3P$B_eig[1:3]/sum(T3P$B_eig), 2)
+    T3P <- T3P[modes] %>% as.data.frame
   }
 
   if(modes == "ACplot"){
     cc <- factor(rep(seq(1,n_time), each = n_sub))
+    lb <- paste0("Three Mode Component ", 1:3, " (",  pv, ")%")
     scatterplot3d::scatterplot3d(T3P[,1], T3P[,2], T3P[,3],
                                  color = cc, pch=pch,
-                                 xlab = "B1", ylab = "B2", zlab = "B3",
+                                 xlab = lb[1], ylab = lb[2], zlab = lb[3],
                                  cex.axis = cex.axis, cex.lab = cex.lab,
                                  main = main, sub = subtitle)
 

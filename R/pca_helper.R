@@ -59,5 +59,3 @@ A_matricization <- function(micro_set, table, subject, y, time_var){
   wide_otu %>%
     tibble::column_to_rownames(var = "sub")
 }
-
-
