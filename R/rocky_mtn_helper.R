@@ -35,13 +35,15 @@ phyl_ord <- function(cor_set){
 
 ## Function to match taxa with their full phylum name for better legend
 phy_fun <- function(x){
-  phy <- c("Acidobacteria","Actinobacteria","Aquificae","Armatimonadetes","Bacteroidetes",
-           "Bacteria", "Caldiserica", "Chlamydiae", "Chlorobi","Chloroflexi","Chrysiogenetes",
-           "Cyanobacteria","Deferribacteres","Deinococcus-Thermus","Dictyoglomi",
-           "Elusimicrobia","Fibrobacteres","Firmicutes","Fusobacteria","Gemmatimonadetes",
-           "Lentisphaerae","Nitrospirae","Planctomycetes","Proteobacteria","Spirochaetes",
-           "Synergistetes","Tenericutes","Thermodesulfobacteria","Thermomicrobia",
-           "Thermotogae","Verrucomicrobia")
+  phy <- c("Acidobacteria","Actinobacteria","Aquificae","Armatimonadetes",
+           "Bacteroidetes", "Bacteria", "Caldiserica", "Campylobacterota",
+           "Chlamydiae", "Chlorobi", "Chloroflexi", "Chrysiogenetes",
+           "Cyanobacteria","Deferribacteres", "Deinococcus-Thermus",
+           "Desulfobacterota", "Dictyoglomi", "Elusimicrobia","Fibrobacteres",
+           "Firmicutes", "Fusobacteria","Gemmatimonadetes", "Lentisphaerae",
+           "Nitrospirae", "Planctomycetes","Proteobacteria","Spirochaetes",
+           "Synergistetes", "Tenericutes","Thermodesulfobacteria",
+           "Thermomicrobia", "Thermotogae","Verrucomicrobia")
 
   phyl <- ifelse(sum(stringr::str_detect(phy, stringr::str_sub(x, 1L, 8L))) == 1,
                  phy[stringr::str_detect(phy, stringr::str_sub(x, 1L, 7L))],
