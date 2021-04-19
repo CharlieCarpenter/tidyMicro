@@ -23,6 +23,21 @@ testthat::test_that("Named lists and lists give same result", {
   expect_equivalent(nmd, tbn)
 })
 
+# testthat::test_that("otu_filter shoud give same reults", {
+#
+#   data("mrsa_clin"); data("mrsa_gen")
+#
+#   tidy.f <- tidy_micro(mrsa_gen, tab_names = "G", clinical = mrsa_clin,
+#                        count_summary = F, filter_summary = F,
+#                        prev_cutoff = 5, ra_cutoff = 1)
+#
+#   set <- tidy_micro(mrsa_gen, tab_names = "G", mrsa_clin,
+#                      count_summary = F, filter_summary = F)
+#
+#   otu.f <- otu_filter(set, prev_cutoff = 5, ra_cutoff = 1)
+#
+#   expect_equivalent(tidy.f, otu.f)
+# })
 
 
 
