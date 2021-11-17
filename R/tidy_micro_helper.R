@@ -112,11 +112,11 @@ mul_otu_long <- function(in_OTU, .meta){
     dplyr::left_join(m.clr,by=c("Lib","Taxa")) %>%
     dplyr::left_join(m.ra,by=c("Lib","Taxa")) %>%
     dplyr::mutate(Total= tots) %>% ## Creating total for each taxa
-    dplyr::select(rlang::.data$Lib,rlang::.data$Taxa,dplyr::everything())
+    dplyr::select(Lib, Taxa, dplyr::everything())
 
   suppressWarnings(
     long_OTU %>%
-      dplyr::select(rlang::.data$Lib,rlang::.data$Taxa,dplyr::everything()) %>%
+      dplyr::select(Lib, Taxa, dplyr::everything()) %>%
       dplyr::full_join(.meta, by="Lib")
   ) %>%
     return()
