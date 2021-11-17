@@ -9,8 +9,7 @@ test_that("cor_rocky_mtn takes numeric values only", {
                     filter_summary = FALSE, count_summary = FALSE) %>%
     filter(day == 7)
 
-  expect_error( cor_rocky_mtn(set, table = "P", bpd1), "'x' must be numeric",
-                class = "dplyr_error")
+  expect_error( cor_rocky_mtn(set, table = "P", bpd1), "'x' must be numeric")
   expect_error( cor_rocky_mtn(set, table = "P") )
 })
 
